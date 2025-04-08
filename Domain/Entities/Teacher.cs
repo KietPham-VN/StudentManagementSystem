@@ -1,10 +1,11 @@
 ﻿namespace StudentManagementSystem.Domain.Entities
 {
-    public class School
+    public class Teacher
     {
         public int Id { get; set; }
+        public string AspNetUserId { get; set; }
 
-        public ICollection<StudentSchool> StudentSchools { get; set; }
+        public AspNetUser AspNetUser { get; set; }
         public ICollection<TeacherSchool> TeacherSchools { get; set; }
     }
 }
