@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StudentManagementSystem.Domain.Entities;
 
-namespace StudentManagementSystem.Infrasctructures
+namespace StudentManagementSystem.Application.Interfaces
 {
     public interface IApplicationDbContext
     {
-        DbSet<Admin> Students { get; set; }
+        DbSet<Admin> Admins { get; set; }
         DbSet<Answer> Answers { get; set; }
         DbSet<AnswerQuestion> AnswerQuestions { get; set; }
         DbSet<AspNetRole> AspNetRoles { get; set; }
@@ -19,11 +19,12 @@ namespace StudentManagementSystem.Infrasctructures
         DbSet<ExamSubmission> ExamSubmissions { get; set; }
         DbSet<Question> Questions { get; set; }
         DbSet<School> Schools { get; set; }
-        DbSet<Student> Student { get; set; }
+        DbSet<Student> Students { get; set; }
         DbSet<StudentSchool> StudentSchools { get; set; }
         DbSet<Submission> Submissions { get; set; }
         DbSet<SubmissionAnswer> SubmissionAnswers { get; set; }
         DbSet<Teacher> Teachers { get; set; }
+        DbSet<TeacherCourse> TeacherCourses { get; set; }
         DbSet<TeacherSchool> TeacherSchools { get; set; }
     }
 }

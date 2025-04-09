@@ -7,5 +7,6 @@
 
         public AspNetUser AspNetUser { get; set; }
         public ICollection<TeacherSchool> TeacherSchools { get; set; }
+        public ICollection<TeacherCourse> TeacherCourses { get; set; }
     }
 }

@@ -2,7 +2,10 @@
 {
     public class AspNetUserRole
     {
-        public string UserId { get; set; }
-        public string RoleId { get; set; }
+        public string AspNetUserId { get; set; }
+        public string AspNetRoleId { get; set; }
+
+        public AspNetUser AspNetUser { get; set; }
+        public AspNetRole AspNetRole { get; set; }
     }
 }

@@ -1,6 +1,8 @@
-﻿namespace StudentManagementSystem.Domain.Entities
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace StudentManagementSystem.Domain.Entities
 {
-    public class AspNetUser
+    public class AspNetUser : IdentityUser
     {
         public string Id { get; set; }
         public string UserName { get; set; }
@@ -20,5 +22,7 @@
 
         public string FirstName { get; set; }
         public string LastName { get; set; }
+
+        public ICollection<AspNetUserRole> UserRoles { get; set; }
     }
 }

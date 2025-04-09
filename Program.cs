@@ -1,14 +1,14 @@
+using StudentManagementSystem.Application.Interfaces;
+using StudentManagementSystem.Infrasctructures.Database.Context;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-// DI container, IServiceProvider
-
+builder.Services.AddDbContext<IApplicationDbContext, ApplicationDbContext>();
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
