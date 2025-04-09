@@ -21,13 +21,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Application\DTOs\" />
-    <Folder Include="Application\Services\" />
-    <Folder Include="Application\UseCases\Students\" />
     <Folder Include="Domain\Interfaces\" />
     <Folder Include="Domain\ValueObjects\" />
     <Folder Include="Infrasctructures\Services\" />
-    <Folder Include="WebAPI\Middlewares\" />
   </ItemGroup>
 
 </Project>

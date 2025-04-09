@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StudentManagementSystem.Application.Interfaces;
 using StudentManagementSystem.Domain.Entities;
-using StudentManagementSystem.Infrasctructures.DatabaseMappings;
+using StudentManagementSystem.Infrasctructures.Database.Mappings;
 
 namespace StudentManagementSystem.Infrasctructures.Database.Context
 {

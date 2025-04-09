@@ -9,7 +9,11 @@ namespace StudentManagementSystem.Infrasctructures.Database.Mappings
         public void Configure(EntityTypeBuilder<Student> builder)
         {
             builder.ToTable("Students");
+
             builder.HasKey(s => s.Id);
+
+            builder.Property(s => s.Id)
+                   .ValueGeneratedOnAdd();
 
             builder.HasOne(s => s.AspNetUser)
                    .WithMany()

@@ -26,5 +26,7 @@ namespace StudentManagementSystem.Application.Interfaces
         DbSet<Teacher> Teachers { get; set; }
         DbSet<TeacherCourse> TeacherCourses { get; set; }
         DbSet<TeacherSchool> TeacherSchools { get; set; }
+
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }
