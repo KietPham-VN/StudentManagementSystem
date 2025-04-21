@@ -21,7 +21,7 @@ namespace StudentManagementSystem.Controllers
         }
 
         [HttpPut]
-        public bool UpdateSchool(UpdateSchoolModel updateSchool)
+        public bool UpdateSchool(SchoolUpdateModel updateSchool)
         {
             return schoolService.UpdateSchool(updateSchool);
         }

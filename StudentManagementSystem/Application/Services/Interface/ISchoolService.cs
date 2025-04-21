@@ -1,4 +1,6 @@
-﻿using StudentManagementSystem.Application.DTOs.SchoolDTO;
+﻿
+
+using StudentManagementSystem.Application.DTOs.SchoolDTO;
 
 namespace StudentManagementSystem.Application.Services.Interface
 {
@@ -6,10 +8,10 @@ namespace StudentManagementSystem.Application.Services.Interface
     {
         IEnumerable<SchoolViewModel> GetSchools(int? SchoolId);
 
-        bool CreateSchool(CreateSchoolModel School);
+        SchoolCreateModel CreateSchool(SchoolCreateModel School);
 
-        bool UpdateSchool(UpdateSchoolModel updateSchool);
+        SchoolUpdateModel UpdateSchool(SchoolUpdateModel updateSchool);
 
-        bool DeleteSchool(int id);
+        SchoolViewModel DeleteSchool(int id);
     }
 }
