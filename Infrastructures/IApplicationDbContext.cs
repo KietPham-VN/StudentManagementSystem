@@ -14,7 +14,5 @@ namespace StudentManagementSystem.Infrastructures
         EntityEntry<T> Entity<T>(T entity) where T : class;
 
         int SaveChanges();
-
-        public Task<int> SaveChangeAsync();
     }
 }

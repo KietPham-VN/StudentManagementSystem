@@ -22,15 +22,15 @@ namespace StudentManagementSystem.Application.Services.Implementation
             })];
         }
 
-        public bool CreateCourse(CreateCourseModel course)
+        public async Task<bool> CreateCourse(CreateCourseModel course)
         {
             var newCourse = new Course
             {
                 CourseName = course.CourseName,
                 StartDate = course.StartDate,
             };
-            _context.Courses.Add(newCourse);
-            _context.SaveChanges();
+            //await _context.Courses.Add(newCourse);
+            //await _context.SaveChanges();
             return true;
         }
 

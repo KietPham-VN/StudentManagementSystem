@@ -15,9 +15,9 @@ namespace StudentManagementSystem.Controllers
         }
 
         [HttpPost]
-        public bool CreateCourse(CreateCourseModel course)
+        public async Task<bool> CreateCourse(CreateCourseModel course)
         {
-            return courseService.CreateCourse(course);
+            return await courseService.CreateCourse(course);
         }
 
         [HttpPut]

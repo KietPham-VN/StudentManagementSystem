@@ -17,6 +17,14 @@ namespace StudentManagementSystem.Application.Services.Implementation
                 query = query.Where(student => student.Id == Id.Value);
             }
 
+            foreach (var student in query)
+            {
+                if (student == null)
+                {
+                    throw new Exception("Student Not Found");
+                }
+            }
+
             var students = query.Select(student => new StudentViewModel
             {
                 Id = student.Id,

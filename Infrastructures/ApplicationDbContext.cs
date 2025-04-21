@@ -19,7 +19,7 @@ namespace StudentManagementSystem.Infrastructures
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=KIETPA\\SQLEXPRESS;Database=StudentManagementSystem;Trusted_Connection=True;TrustServerCertificate=True");
+            //optionsBuilder.UseSqlServer("Server=KIETPA\\SQLEXPRESS;Database=StudentManagementSystem;Trusted_Connection=True;TrustServerCertificate=True");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -34,11 +34,6 @@ namespace StudentManagementSystem.Infrastructures
         public override int SaveChanges()
         {
             return base.SaveChanges();
-        }
-
-        public async Task<int> SaveChangeAsync()
-        {
-            return await base.SaveChangesAsync();
         }
     }
 }

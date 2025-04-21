@@ -6,14 +6,19 @@ namespace StudentManagementSystem.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class StudentController(IStudentService StudentService) : ControllerBase
+    public class StudentController(IStudentService studentService, ILogger<StudentController> logger) : ControllerBase
     {
         [HttpGet]
         public IActionResult GetStudents(int? Id)
         {
             try
             {
-                return Ok(StudentService.GetStudents(Id));
+                if (Id == 10)
+                {
+                    logger.LogWarning("Id is 10, returning empty result");
+                }
+                logger.LogInformation("GetStudents method called with Id: {Id}", Id);
+                return Ok(studentService.GetStudents(Id));
             }
             catch (Exception ex)
             {
@@ -26,7 +31,7 @@ namespace StudentManagementSystem.Controllers
         {
             try
             {
-                return Ok(StudentService.CreateStudent(student));
+                return Ok(studentService.CreateStudent(student));
             }
             catch (Exception ex)
             {
@@ -39,7 +44,7 @@ namespace StudentManagementSystem.Controllers
         {
             try
             {
-                return Ok(StudentService.UpdateStudent(student));
+                return Ok(studentService.UpdateStudent(student));
             }
             catch (Exception ex)
             {
@@ -52,7 +57,7 @@ namespace StudentManagementSystem.Controllers
         {
             try
             {
-                return Ok(StudentService.DeleteStudent(id));
+                return Ok(studentService.DeleteStudent(id));
             }
             catch (Exception ex)
             {

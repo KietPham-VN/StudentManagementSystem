@@ -6,7 +6,7 @@ namespace StudentManagementSystem.Application.Services.Interface
     {
         IEnumerable<CourseViewModel> GetCourses(int? CourseId);
 
-        bool CreateCourse(CreateCourseModel course);
+        Task<bool> CreateCourse(CreateCourseModel course);
 
         bool UpdateCourse(UpdateCourseModel course);
 
