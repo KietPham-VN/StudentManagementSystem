@@ -15,10 +15,10 @@ builder.Services.AddScoped<ISchoolService, SchoolService>();
 builder.Services.AddScoped<ICourseService, CourseService>();
 builder.Services.AddScoped<ICourseStudentService, CourseStudentService>();
 
-Log.Logger = new LoggerConfiguration()
-    .WriteTo.File("C:\\Users\\anhki\\OneDrive\\Desktop\\try.txt", rollingInterval: RollingInterval.Minute)
-    .MinimumLevel.Warning()
-    .CreateLogger();
+//Log.Logger = new LoggerConfiguration()
+//    .WriteTo.File("C:\\Users\\anhki\\OneDrive\\Desktop\\try.txt", rollingInterval: RollingInterval.Minute)
+//    .MinimumLevel.Warning()
+//    .CreateLogger();
 
 builder.Host.UseSerilog();
 var app = builder.Build();
