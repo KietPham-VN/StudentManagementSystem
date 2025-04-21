@@ -5,57 +5,76 @@ using StudentManagementSystem.Infrastructures;
 
 namespace StudentManagementSystem.Application.Services.Implementation
 {
-    public class SchoolService(IApplicationDbContext _context) : ISchoolService
+    public class SchoolService(IApplicationDbContext context) : ISchoolService
     {
         public IEnumerable<SchoolViewModel> GetSchools(int? SchoolId)
         {
-            var Schools = _context.Schools.AsQueryable();
+            var Schools = context.Schools.AsQueryable();
             if (SchoolId.HasValue)
             {
                 Schools = Schools.Where(school => school.Id == SchoolId);
             }
-            return [.. Schools.Select(school => new SchoolViewModel
-            {
-                SchoolName = school.SchoolName,
-                Address = school.Address
-            })];
+            return
+            [.. Schools.Select
+                (
+                    school => new SchoolViewModel
+                    {
+                        SchoolName = school.SchoolName,
+                        Address = school.Address
+                    }
+                )
+            ];
         }
 
-        public bool CreateSchool(CreateSchoolModel School)
+        public SchoolCreateModel CreateSchool(SchoolCreateModel School)
         {
             var newSchool = new School
             {
                 SchoolName = School.SchoolName,
                 Address = School.Address
             };
-            _context.Schools.Add(newSchool);
-            _context.SaveChanges();
-            return true;
+            context.Schools.Add(newSchool);
+            context.SaveChanges();
+            return new SchoolCreateModel()
+            {
+                SchoolId = newSchool.Id,
+                SchoolName = newSchool.SchoolName,
+                Address = newSchool.Address
+            };
         }
 
-        public bool UpdateSchool(UpdateSchoolModel updateSchool)
+        public SchoolUpdateModel UpdateSchool(SchoolUpdateModel updateSchool)
         {
-            var school = _context.Schools.FirstOrDefault(s => s.Id == updateSchool.Id);
+            var school = context.Schools.FirstOrDefault(s => s.Id == updateSchool.Id);
             if (school != null)
             {
                 school.SchoolName = updateSchool.NameSchool;
                 school.Address = updateSchool.Address;
-                _context.SaveChanges();
-                return true;
+                context.SaveChanges();
+                return new SchoolUpdateModel
+                {
+                    Id = school.Id,
+                    NameSchool = school.SchoolName,
+                    Address = school.Address
+                };
             }
-            return false;
+            return null;
         }
 
-        public bool DeleteSchool(int id)
+        public SchoolViewModel DeleteSchool(int id)
         {
-            var school = _context.Schools.FirstOrDefault(s => s.Id == id);
+            var school = context.Schools.FirstOrDefault(s => s.Id == id);
             if (school != null)
             {
-                _context.Schools.Remove(school);
-                _context.SaveChanges();
-                return true;
+                context.Schools.Remove(school);
+                context.SaveChanges();
+                return new SchoolViewModel
+                {
+                    SchoolName = school.SchoolName,
+                    Address = school.Address
+                };
             }
-            return false;
+            return null;
         }
     }
 }
