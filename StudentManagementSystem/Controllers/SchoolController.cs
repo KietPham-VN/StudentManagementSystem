@@ -15,21 +15,21 @@ namespace StudentManagementSystem.Controllers
         }
 
         [HttpPost]
-        public bool CreateSchool(CreateSchoolModel school)
+        public IActionResult CreateSchool(SchoolCreateModel school)
         {
-            return schoolService.CreateSchool(school);
+            return Ok(schoolService.CreateSchool(school));
         }
 
         [HttpPut]
-        public bool UpdateSchool(SchoolUpdateModel updateSchool)
+        public IActionResult UpdateSchool(SchoolUpdateModel updateSchool)
         {
-            return schoolService.UpdateSchool(updateSchool);
+            return Ok(schoolService.UpdateSchool(updateSchool));
         }
 
         [HttpDelete]
-        public bool DeleteSchool(int id)
+        public IActionResult DeleteSchool(int id)
         {
-            return schoolService.DeleteSchool(id);
+            return Ok(schoolService.DeleteSchool(id));
         }
     }
 }

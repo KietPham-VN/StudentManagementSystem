@@ -1,6 +1,4 @@
-﻿
-
-using StudentManagementSystem.Application.DTOs.SchoolDTO;
+﻿using StudentManagementSystem.Application.DTOs.SchoolDTO;
 
 namespace StudentManagementSystem.Application.Services.Interface
 {
