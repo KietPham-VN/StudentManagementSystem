@@ -1,6 +1,6 @@
 ﻿namespace StudentManagementSystem.Application.DTOs.SchoolDTO
 {
-    public class UpdateSchoolModel
+    public class SchoolUpdateModel
     {
         public int Id { get; set; }
         public string NameSchool { get; set; }
