@@ -8,12 +8,12 @@ namespace StudentManagementSystem.Application.Services.Implementation
 {
     public class CourseStudentService(IApplicationDbContext _context) : ICourseStudentService
     {
-        public IEnumerable<CourseStudentViewModel> GetCourseStudents(int? courseId, int? studentId)
+        public CourseStudentViewModel GetCourseStudents(int? courseId, int? studentId)
         {
             var query = _context.CourseStudents
-                .Include(cs => cs.Course)
-                .Include(cs => cs.Student)
-                .AsQueryable();
+               .Include(cs => cs.Course)
+               .Include(cs => cs.Student)
+               .AsQueryable();
 
             if (courseId is not null)
                 query = query.Where(cs => cs.CourseId == courseId);
@@ -30,12 +30,15 @@ namespace StudentManagementSystem.Application.Services.Implementation
                 AssignmentScore = cs.AssignmentScore,
                 PracticalScore = cs.PracticalScore,
                 FinalScore = cs.FinalScore
-            }).ToList();
-
+            }).FirstOrDefault();
+            if (result == null)
+            {
+                throw new KeyNotFoundException("Not Found CourseId / StudentId!");
+            }
             return result;
         }
 
-        public bool AddCourseStudent(CreateCourseStudentModel courseStudent)
+        public CourseStudentCreateModel CreateCourseStudent(CourseStudentCreateModel courseStudent)
         {
             var courseStudentEntity = new CourseStudent
             {
@@ -45,11 +48,21 @@ namespace StudentManagementSystem.Application.Services.Implementation
                 PracticalScore = courseStudent.PracticalScore,
                 FinalScore = courseStudent.FinalScore
             };
+
             _context.CourseStudents.Add(courseStudentEntity);
-            return _context.SaveChanges() > 0;
+            _context.SaveChanges();
+
+            return new CourseStudentCreateModel
+            {
+                CourseId = courseStudentEntity.CourseId,
+                StudentId = courseStudentEntity.StudentId,
+                AssignmentScore = courseStudentEntity.AssignmentScore ?? 0,
+                PracticalScore = courseStudentEntity.PracticalScore ?? 0,
+                FinalScore = courseStudentEntity.FinalScore ?? 0
+            };
         }
 
-        public bool UpdateCourseStudent(int courseId, int studentId, UpdateCourseStudentModel updateCourseStudent)
+        public CourseStudentUpdateModel UpdateCourseStudent(int courseId, int studentId, CourseStudentUpdateModel updateCourseStudent)
         {
             var courseStudent = _context.CourseStudents
                 .FirstOrDefault(cs => cs.CourseId == courseId && cs.StudentId == studentId);
@@ -59,7 +72,18 @@ namespace StudentManagementSystem.Application.Services.Implementation
                 courseStudent.PracticalScore = updateCourseStudent.PracticalScore;
                 courseStudent.FinalScore = updateCourseStudent.FinalScore;
             }
-            return _context.SaveChanges() > 0;
+            else
+            {
+                throw new KeyNotFoundException("Not Found CourseId / StudentId!");
+            }
+            return new CourseStudentUpdateModel
+            {
+                CourseId = courseStudent.CourseId,
+                StudentId = courseStudent.StudentId,
+                AssignmentScore = courseStudent.AssignmentScore ?? 0,
+                PracticalScore = courseStudent.PracticalScore ?? 0,
+                FinalScore = courseStudent.FinalScore ?? 0
+            };
         }
 
         public IEnumerable<CourseScoreViewModel> GetScoresByStudent(int studentId)
@@ -90,17 +114,17 @@ namespace StudentManagementSystem.Application.Services.Implementation
         public bool RegisterCourse(RegisterCourseModel registerCourse)
         {
             var exists = _context.CourseStudents.Any(cs =>
-        cs.StudentId == registerCourse.StudentId &&
-        cs.CourseId == registerCourse.CourseId);
+                cs.StudentId == registerCourse.StudentId &&
+                cs.CourseId == registerCourse.CourseId);
 
             if (exists)
-                return false; // Hoặc throw lỗi đã đăng ký
+                return false;
 
             var newEntry = new CourseStudent
             {
                 StudentId = registerCourse.StudentId,
                 CourseId = registerCourse.CourseId,
-                AssignmentScore = null,    // vì mới đăng ký
+                AssignmentScore = null,
                 PracticalScore = null,
                 FinalScore = null
             };

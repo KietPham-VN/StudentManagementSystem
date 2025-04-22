@@ -9,27 +9,55 @@ namespace StudentManagementSystem.Controllers
     public class CourseController(ICourseService courseService) : ControllerBase
     {
         [HttpGet]
-        public IEnumerable<CourseViewModel> GetCourses(int? CourseId)
+        public IActionResult GetCourses(int? CourseId)
         {
-            return courseService.GetCourses(CourseId);
+            try
+            {
+                return Ok(courseService.GetCourses(CourseId));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Lỗi server: " + ex.Message);
+            }
         }
 
         [HttpPost]
-        public async Task<bool> CreateCourse(CreateCourseModel course)
+        public IActionResult CreateCourse(CreateCourseModel course)
         {
-            return await courseService.CreateCourse(course);
+            try
+            {
+                return Ok(courseService.CreateCourse(course));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Lỗi server: " + ex.Message);
+            }
         }
 
         [HttpPut]
-        public bool UpdateCourse(UpdateCourseModel course)
+        public IActionResult UpdateCourse(CourseUpdateModel course)
         {
-            return courseService.UpdateCourse(course);
+            try
+            {
+                return Ok(courseService.UpdateCourse(course));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Lỗi server: " + ex.Message);
+            }
         }
 
         [HttpDelete]
-        public bool DeleteCourse(int courseId)
+        public IActionResult DeleteCourse(int courseId)
         {
-            return courseService.DeleteCourse(courseId);
+            try
+            {
+                return Ok(courseService.DeleteCourse(courseId));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Lỗi server: " + ex.Message);
+            }
         }
     }
 }

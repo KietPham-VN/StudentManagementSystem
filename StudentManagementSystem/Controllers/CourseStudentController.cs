@@ -9,21 +9,49 @@ namespace StudentManagementSystem.Controllers
     public class CourseStudentController(ICourseStudentService courseService) : ControllerBase
     {
         [HttpGet]
-        public IEnumerable<CourseStudentViewModel> GetCourseStudents(int? courseId, int? studentId)
+        public IActionResult GetCourseStudents(int? courseId, int? studentId)
         {
-            return courseService.GetCourseStudents(courseId, studentId);
+            try
+            {
+                var courseStudent = courseService.GetCourseStudents(courseId, studentId);
+                return Ok(courseStudent);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpPost]
-        public bool AddCourseStudent(CreateCourseStudentModel courseStudent)
+        public IActionResult CreateCourseStudent(CourseStudentCreateModel courseStudent)
         {
-            return courseService.AddCourseStudent(courseStudent);
+            try
+            {
+                var createdCourseStudent = courseService.CreateCourseStudent(courseStudent);
+                return CreatedAtAction(nameof(GetCourseStudents), new { courseId = createdCourseStudent.CourseId, studentId = createdCourseStudent.StudentId }, createdCourseStudent);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPut("{courseId}/{studentId}")]
-        public bool UpdateCourseStudent(int courseId, int studentId, UpdateCourseStudentModel updateCourseStudent)
+        public IActionResult UpdateCourseStudent(int courseId, int studentId, CourseStudentUpdateModel updateCourseStudent)
         {
-            return courseService.UpdateCourseStudent(courseId, studentId, updateCourseStudent);
+            try
+            {
+                var updatedCourseStudent = courseService.UpdateCourseStudent(courseId, studentId, updateCourseStudent);
+                return Ok(updatedCourseStudent);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("scores/{studentId}")]
