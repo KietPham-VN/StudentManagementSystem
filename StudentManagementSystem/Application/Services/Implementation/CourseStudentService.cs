@@ -76,6 +76,7 @@ namespace StudentManagementSystem.Application.Services.Implementation
             {
                 throw new KeyNotFoundException("Not Found CourseId / StudentId!");
             }
+            _context.SaveChanges();
             return new CourseStudentUpdateModel
             {
                 CourseId = courseStudent.CourseId,
