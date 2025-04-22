@@ -1,4 +1,5 @@
-﻿using StudentManagementSystem.Application.DTOs.CourseDTO;
+﻿using Microsoft.IdentityModel.Tokens;
+using StudentManagementSystem.Application.DTOs.CourseDTO;
 using StudentManagementSystem.Application.Services.Interface;
 using StudentManagementSystem.Domain.Entities;
 using StudentManagementSystem.Infrastructures;
@@ -14,6 +15,10 @@ namespace StudentManagementSystem.Application.Services.Implementation
             {
                 Course = Course.Where(school => school.CourseId == CourseId);
             }
+            if (Course.IsNullOrEmpty())
+            {
+                throw new Exception("Course Not Found");
+            }
             return [.. Course.Select(course => new CourseViewModel
             {
                 CourseId = course.CourseId,
@@ -22,46 +27,60 @@ namespace StudentManagementSystem.Application.Services.Implementation
             })];
         }
 
-        public async Task<bool> CreateCourse(CreateCourseModel course)
+        public CreateCourseModel CreateCourse(CreateCourseModel course)
         {
             var newCourse = new Course
             {
                 CourseName = course.CourseName,
                 StartDate = course.StartDate,
             };
-            //await _context.Courses.Add(newCourse);
-            //await _context.SaveChanges();
-            return true;
+            _context.Courses.Add(newCourse);
+            _context.SaveChanges();
+            return new CreateCourseModel
+            {
+                CourseId = newCourse.CourseId,
+                CourseName = newCourse.CourseName,
+                StartDate = newCourse.StartDate,
+            };
         }
 
-        public bool UpdateCourse(UpdateCourseModel updateCourse)
+        public CourseUpdateModel UpdateCourse(CourseUpdateModel updateCourse)
         {
             var course = _context.Courses.FirstOrDefault(x => x.CourseId == updateCourse.CourseId);
             if (course == null)
             {
-                return false;
+                throw new Exception("Course Not Found");
             }
-            else
+
+            course.CourseName = updateCourse.CourseName;
+            course.StartDate = updateCourse.StartDate;
+            _context.SaveChanges();
+
+            return new CourseUpdateModel
             {
-                course.CourseName = updateCourse.CourseName;
-                course.StartDate = updateCourse.StartDate;
-                _context.SaveChanges();
-                return true;
-            }
+                CourseId = course.CourseId,
+                CourseName = course.CourseName,
+                StartDate = course.StartDate,
+            };
         }
 
-        public bool DeleteCourse(int courseId)
+        public CourseViewModel DeleteCourse(int courseId)
         {
             var course = _context.Courses.FirstOrDefault(x => x.CourseId == courseId);
-            if (course == null)
-            {
-                return false;
-            }
-            else
+            if (course != null)
             {
                 _context.Courses.Remove(course);
                 _context.SaveChanges();
-                return true;
+                return new CourseViewModel
+                {
+                    CourseId = course.CourseId,
+                    CourseName = course.CourseName,
+                    StartDate = course.StartDate,
+                };
+            }
+            else
+            {
+                throw new Exception("Course Not Found");
             }
         }
     }

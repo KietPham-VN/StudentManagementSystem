@@ -1,6 +1,6 @@
 ﻿namespace StudentManagementSystem.Application.DTOs.CourseStudentDTO
 {
-    public class UpdateCourseStudentModel
+    public class CourseStudentUpdateModel
     {
         public int CourseId { get; set; }
         public int StudentId { get; set; }

@@ -4,11 +4,11 @@ namespace StudentManagementSystem.Application.Services.Interface
 {
     public interface ICourseStudentService
     {
-        IEnumerable<CourseStudentViewModel> GetCourseStudents(int? courseId, int? studentId);
+        CourseStudentViewModel GetCourseStudents(int? courseId, int? studentId);
 
-        bool AddCourseStudent(CreateCourseStudentModel courseStudent);
+        CourseStudentCreateModel CreateCourseStudent(CourseStudentCreateModel courseStudent);
 
-        bool UpdateCourseStudent(int courseId, int studentId, UpdateCourseStudentModel updateCourseStudent);
+        CourseStudentUpdateModel UpdateCourseStudent(int courseId, int studentId, CourseStudentUpdateModel updateCourseStudent);
 
         IEnumerable<CourseScoreViewModel> GetScoresByStudent(int studentId);
 
