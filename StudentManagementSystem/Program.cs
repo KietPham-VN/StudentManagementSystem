@@ -1,4 +1,3 @@
-using Serilog;
 using StudentManagementSystem.Application.Services.Implementation;
 using StudentManagementSystem.Application.Services.Interface;
 using StudentManagementSystem.Infrastructures;
@@ -20,7 +19,7 @@ builder.Services.AddScoped<ICourseStudentService, CourseStudentService>();
 //    .MinimumLevel.Warning()
 //    .CreateLogger();
 
-builder.Host.UseSerilog();
+//builder.Host.UseSerilog();
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

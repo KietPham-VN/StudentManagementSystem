@@ -37,6 +37,9 @@ namespace StudentManagementSystem.Controllers
         }
 
         [HttpPut("{courseId}/{studentId}")]
+        [ProducesResponseType(typeof(CourseStudentUpdateModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult UpdateCourseStudent(int courseId, int studentId, CourseStudentUpdateModel updateCourseStudent)
         {
             try
@@ -55,21 +58,30 @@ namespace StudentManagementSystem.Controllers
         }
 
         [HttpGet("scores/{studentId}")]
-        public IEnumerable<CourseScoreViewModel> GetScoresByStudent(int studentId)
+        public IEnumerable<CourseStudentViewModel> GetScoresByStudent(int studentId)
         {
-            return courseService.GetScoresByStudent(studentId);
+            try
+            {
+                var courseStudent = courseService.GetScoresByStudent(studentId);
+                return courseStudent;
+            }
+            catch (KeyNotFoundException ex)
+            {
+                throw new KeyNotFoundException(ex.Message);
+            }
         }
 
         [HttpGet("average/{studentId}")]
         public float GetAverageScore(int studentId)
         {
-            return courseService.GetAverageScore(studentId);
-        }
-
-        [HttpPost("register")]
-        public bool RegisterCourse(RegisterCourseModel registerCourse)
-        {
-            return courseService.RegisterCourse(registerCourse);
+            try
+            {
+                return courseService.GetAverageScore(studentId);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                throw new KeyNotFoundException(ex.Message);
+            }
         }
     }
 }

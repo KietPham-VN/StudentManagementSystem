@@ -56,9 +56,9 @@ namespace StudentManagementSystem.Application.Services.Implementation
             {
                 CourseId = courseStudentEntity.CourseId,
                 StudentId = courseStudentEntity.StudentId,
-                AssignmentScore = courseStudentEntity.AssignmentScore ?? 0,
-                PracticalScore = courseStudentEntity.PracticalScore ?? 0,
-                FinalScore = courseStudentEntity.FinalScore ?? 0
+                AssignmentScore = courseStudentEntity.AssignmentScore,
+                PracticalScore = courseStudentEntity.PracticalScore,
+                FinalScore = courseStudentEntity.FinalScore
             };
         }
 
@@ -86,19 +86,22 @@ namespace StudentManagementSystem.Application.Services.Implementation
             };
         }
 
-        public IEnumerable<CourseScoreViewModel> GetScoresByStudent(int studentId)
+        public IEnumerable<CourseStudentViewModel> GetScoresByStudent(int studentId)
         {
-            var scores = _context.CourseStudents
-                .Where(cs => cs.StudentId == studentId)
+            var courseStudent = _context.CourseStudents
                 .Include(cs => cs.Course)
-                .Select(cs => new CourseScoreViewModel
+                .Where(cs => cs.StudentId == studentId)
+                .Select(cs => new CourseStudentViewModel
                 {
+                    CourseId = cs.CourseId,
+                    StudentId = cs.StudentId,
                     CourseName = cs.Course.CourseName,
-                    AssignmentScore = (float)cs.AssignmentScore,
-                    PracticalScore = (float)cs.PracticalScore,
-                    FinalScore = (float)cs.FinalScore
+                    StudentName = cs.Student.FirstName + " " + cs.Student.LastName,
+                    AssignmentScore = cs.AssignmentScore,
+                    PracticalScore = cs.PracticalScore,
+                    FinalScore = cs.FinalScore
                 }).ToList();
-            return scores;
+            return courseStudent;
         }
 
         public float GetAverageScore(int studentId)
@@ -109,28 +112,6 @@ namespace StudentManagementSystem.Application.Services.Implementation
             if (scores.Count == 0) return 0;
 
             return (float)scores.Average();
-        }
-
-        public bool RegisterCourse(RegisterCourseModel registerCourse)
-        {
-            var exists = _context.CourseStudents.Any(cs =>
-                cs.StudentId == registerCourse.StudentId &&
-                cs.CourseId == registerCourse.CourseId);
-
-            if (exists)
-                return false;
-
-            var newEntry = new CourseStudent
-            {
-                StudentId = registerCourse.StudentId,
-                CourseId = registerCourse.CourseId,
-                AssignmentScore = null,
-                PracticalScore = null,
-                FinalScore = null
-            };
-
-            _context.CourseStudents.Add(newEntry);
-            return _context.SaveChanges() > 0;
         }
     }
 }
