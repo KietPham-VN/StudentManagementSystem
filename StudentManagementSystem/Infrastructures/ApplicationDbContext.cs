@@ -5,7 +5,7 @@ using StudentManagementSystem.Infrastructures.DatabaseMapping;
 
 namespace StudentManagementSystem.Infrastructures
 {
-    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options), IApplicationDbContext
+    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IConfiguration configuration) : DbContext(options), IApplicationDbContext
     {
         public DbSet<Student> Students { get; set; }
         public DbSet<School> Schools { get; set; }
@@ -19,8 +19,7 @@ namespace StudentManagementSystem.Infrastructures
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //optionsBuilder.UseSqlServer("Server=KHANHLINH;Database=StudentManagementSystem;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=True");
-            optionsBuilder.UseSqlServer("Server=KietPA;Database=StudentManagementSystem;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=True");
+            optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
