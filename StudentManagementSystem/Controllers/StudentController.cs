@@ -5,63 +5,69 @@ using StudentManagementSystem.Application.Services.Interface;
 namespace StudentManagementSystem.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class StudentController(IStudentService studentService, ILogger<StudentController> logger) : ControllerBase
     {
         [HttpGet]
-        public IActionResult GetStudents(int? Id)
+        public async Task<ActionResult<IEnumerable<StudentViewModel>>> GetStudents([FromQuery] int? id)
         {
             try
             {
-                if (Id == 10)
-                {
-                    logger.LogWarning("Id is 10, returning empty result");
-                }
-                logger.LogInformation("GetStudents method called with Id: {Id}", Id);
-                return Ok(studentService.GetStudents(Id));
+                var result = await studentService.GetStudents(id);
+                return Ok(result);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Lỗi server: " + ex.Message);
+                logger.LogError(ex, "Error fetching students");
+                return StatusCode(500, $"Lỗi server: {ex.Message}");
             }
         }
 
         [HttpPost]
-        public IActionResult CreateStudent(StudentCreateModel student)
+        public async Task<ActionResult<StudentCreateModel>> CreateStudent([FromBody] StudentCreateModel student)
         {
             try
             {
-                return Ok(studentService.CreateStudent(student));
+                var result = await studentService.CreateStudent(student);
+                return CreatedAtAction(nameof(GetStudents), new { id = result.Id }, result);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Lỗi server: " + ex.Message);
+                logger.LogError(ex, "Error creating student");
+                return StatusCode(500, $"Lỗi server: {ex.Message}");
             }
         }
 
-        [HttpPut]
-        public IActionResult UpdateStudent(StudentUpdateModel student)
+        [HttpPut("{id}")]
+        public async Task<ActionResult<StudentUpdateModel>> UpdateStudent(int id, [FromBody] StudentUpdateModel student)
         {
+            if (id != student.Id)
+                return BadRequest("ID không khớp.");
+
             try
             {
-                return Ok(studentService.UpdateStudent(student));
+                var result = await studentService.UpdateStudent(student);
+                return Ok(result);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Lỗi server: " + ex.Message);
+                logger.LogError(ex, "Error updating student");
+                return StatusCode(500, $"Lỗi server: {ex.Message}");
             }
         }
 
-        [HttpDelete]
-        public IActionResult DeleteStudent(int id)
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<StudentViewModel>> DeleteStudent(int id)
         {
             try
             {
-                return Ok(studentService.DeleteStudent(id));
+                var result = await studentService.DeleteStudent(id);
+                return Ok(result);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Lỗi server: " + ex.Message);
+                logger.LogError(ex, "Error deleting student");
+                return StatusCode(500, $"Lỗi server: {ex.Message}");
             }
         }
     }
