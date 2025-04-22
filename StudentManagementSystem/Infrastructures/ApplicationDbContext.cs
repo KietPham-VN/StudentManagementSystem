@@ -36,7 +36,7 @@ namespace StudentManagementSystem.Infrastructures
             return base.SaveChanges();
         }
 
-        public async Task<int> SaveChangeAsync()
+        public async Task<int> SaveChangesAsync()
         {
             return await base.SaveChangesAsync();
         }

@@ -15,6 +15,6 @@ namespace StudentManagementSystem.Infrastructures
 
         int SaveChanges();
 
-        public Task<int> SaveChangeAsync();
+        public Task<int> SaveChangesAsync();
     }
 }
