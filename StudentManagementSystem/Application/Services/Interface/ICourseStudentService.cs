@@ -10,10 +10,8 @@ namespace StudentManagementSystem.Application.Services.Interface
 
         CourseStudentUpdateModel UpdateCourseStudent(int courseId, int studentId, CourseStudentUpdateModel updateCourseStudent);
 
-        IEnumerable<CourseScoreViewModel> GetScoresByStudent(int studentId);
+        IEnumerable<CourseStudentViewModel> GetScoresByStudent(int studentId);
 
         float GetAverageScore(int studentId);
-
-        bool RegisterCourse(RegisterCourseModel registerCourse);
     }
 }
