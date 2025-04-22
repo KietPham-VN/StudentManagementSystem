@@ -4,12 +4,12 @@ namespace StudentManagementSystem.Application.Services.Interface
 {
     public interface IStudentService
     {
-        IEnumerable<StudentViewModel> GetStudents(int? Id);
+        Task<IEnumerable<StudentViewModel>> GetStudents(int? id);
 
-        StudentCreateModel CreateStudent(StudentCreateModel student);
+        Task<StudentCreateModel> CreateStudent(StudentCreateModel student);
 
-        StudentUpdateModel UpdateStudent(StudentUpdateModel student);
+        Task<StudentUpdateModel> UpdateStudent(StudentUpdateModel student);
 
-        StudentViewModel DeleteStudent(int id);
+        Task<StudentViewModel> DeleteStudent(int id);
     }
 }
