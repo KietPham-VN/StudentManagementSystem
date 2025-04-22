@@ -19,7 +19,8 @@ namespace StudentManagementSystem.Infrastructures
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=KHANHLINH;Database=StudentManagementSystem;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=True");
+            //optionsBuilder.UseSqlServer("Server=KHANHLINH;Database=StudentManagementSystem;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=True");
+            optionsBuilder.UseSqlServer("Server=KietPA;Database=StudentManagementSystem;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=True");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
