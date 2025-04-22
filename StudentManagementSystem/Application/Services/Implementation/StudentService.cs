@@ -8,9 +8,9 @@ namespace StudentManagementSystem.Application.Services.Implementation
 {
     public class StudentService(IApplicationDbContext context) : IStudentService
     {
-        public async Task<IEnumerable<StudentViewModel>> GetStudents(int? id)
+        public async Task<IReadOnlyList<StudentViewModel>> GetStudents(int? id)
         {
-            var query = context.Students.AsQueryable();
+            var query = context.Students.AsNoTracking().AsQueryable();
 
             if (id.HasValue)
             {
@@ -27,7 +27,7 @@ namespace StudentManagementSystem.Application.Services.Implementation
                 SchoolId = s.SchoolId
             }).ToListAsync();
 
-            if (!(students != null && students.Count != 0))
+            if (students is null || students.Count == 0)
             {
                 throw new KeyNotFoundException("Student(s) not found.");
             }
@@ -59,7 +59,9 @@ namespace StudentManagementSystem.Application.Services.Implementation
         {
             ArgumentNullException.ThrowIfNull(student);
 
-            var existingStudent = await context.Students.FindAsync(student.Id) ?? throw new KeyNotFoundException("Student not found.");
+            var existingStudent = await context.Students.FindAsync(student.Id)
+                ?? throw new KeyNotFoundException("Student not found.");
+
             existingStudent.FirstName = student.FirstName;
             existingStudent.LastName = student.LastName;
             existingStudent.DateOfBirth = student.DateOfBirth;
@@ -73,7 +75,9 @@ namespace StudentManagementSystem.Application.Services.Implementation
 
         public async Task<StudentViewModel> DeleteStudent(int id)
         {
-            var student = await context.Students.FindAsync(id) ?? throw new KeyNotFoundException("Student not found.");
+            var student = await context.Students.FindAsync(id)
+                ?? throw new KeyNotFoundException("Student not found.");
+
             context.Students.Remove(student);
             await context.SaveChangesAsync();
 
