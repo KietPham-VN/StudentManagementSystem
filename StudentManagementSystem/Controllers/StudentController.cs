@@ -11,16 +11,9 @@ namespace StudentManagementSystem.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<StudentViewModel>>> GetStudents([FromQuery] int? id)
         {
-            try
-            {
-                var result = await studentService.GetStudents(id);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Error fetching students");
-                return StatusCode(500, $"Lỗi server: {ex.Message}");
-            }
+            var result = await studentService.GetStudents(id);
+            throw new Exception("ahihi ngu =)))))))))");
+            return Ok(result);
         }
 
         [HttpPost]
