@@ -1,4 +1,6 @@
-﻿using Serilog;
+﻿using FluentValidation;
+using FluentValidation.AspNetCore;
+using Serilog;
 using StudentManagementSystem.Application.ActionFilters;
 using StudentManagementSystem.Application.Middlewares;
 using StudentManagementSystem.Application.Services.Implementation;
@@ -23,6 +25,8 @@ builder.Services.AddSingleton<LogMiddleware>();
 builder.Services.AddSingleton<RateLimitMiddleware>();
 builder.Services.AddSingleton<ICacheService, CacheService>();
 builder.Services.AddSingleton<LogFilter>();
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddMemoryCache();
 
 var slnRoot = Directory.GetParent(AppContext.BaseDirectory)?
