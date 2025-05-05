@@ -25,16 +25,9 @@ namespace StudentManagementSystem.Controllers
         [HttpPost]
         public async Task<ActionResult<StudentCreateModel>> CreateStudent([FromBody] StudentCreateModel student)
         {
-            try
-            {
-                var result = await studentService.CreateStudent(student);
-                return CreatedAtAction(nameof(GetStudents), new { id = result.Id }, result);
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Error creating student");
-                return StatusCode(500, $"Lỗi server: {ex.Message}");
-            }
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            var result = await studentService.CreateStudent(student);
+            return CreatedAtAction(nameof(GetStudents), new { id = result.Id }, result);
         }
 
         [HttpPut("{id}")]
