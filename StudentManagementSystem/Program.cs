@@ -1,4 +1,4 @@
-using Serilog;
+﻿using Serilog;
 using StudentManagementSystem.Application.ActionFilters;
 using StudentManagementSystem.Application.Middlewares;
 using StudentManagementSystem.Application.Services.Implementation;
@@ -21,30 +21,44 @@ builder.Services.AddScoped<ICourseService, CourseService>();
 builder.Services.AddScoped<ICourseStudentService, CourseStudentService>();
 builder.Services.AddSingleton<LogMiddleware>();
 builder.Services.AddSingleton<RateLimitMiddleware>();
-
+builder.Services.AddSingleton<ICacheService, CacheService>();
 builder.Services.AddSingleton<LogFilter>();
 
+var slnRoot = Directory.GetParent(AppContext.BaseDirectory)?
+                        .Parent?.Parent?.Parent?.Parent?.FullName;
+
+var logDir = Path.Combine(slnRoot!, "Logs");
+
+
+if (!Directory.Exists(logDir))
+{
+    Directory.CreateDirectory(logDir);
+}
+
+var logFilePath = Path.Combine(logDir, "log.txt");
+
 Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Warning()
-    .WriteTo.File("\"D:\\DotNet\\StudentManagementSystem\\log.txt\"",
-        rollingInterval: RollingInterval.Minute)
+    .MinimumLevel.Debug()
+    .WriteTo.File(logFilePath, rollingInterval: RollingInterval.Day)
+    .WriteTo.Console()
     .CreateLogger();
-builder.Host.UseSerilog();
+
+
 
 var app = builder.Build();
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-//app.UseExceptionHandler("/Error");
 
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+app.UseMiddleware<LogMiddleware>();
+app.UseMiddleware<RateLimitMiddleware>();
 app.MapControllers();
 
 app.Use(async (context, next) =>
@@ -60,6 +74,4 @@ app.Use(async (context, next) =>
     await next(context);
     Console.WriteLine("Response to middleware 2");
 });
-app.UseMiddleware<LogMiddleware>();
-app.UseMiddleware<RateLimitMiddleware>();
 await app.RunAsync();

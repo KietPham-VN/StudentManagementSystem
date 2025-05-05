@@ -3,26 +3,18 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace StudentManagementSystem.Application.ActionFilters
 {
-    public class LogFilter : IExceptionFilter
+    public class LogFilter(ILogger<LogFilter> logger) : IExceptionFilter
     {
-        private readonly ILogger<LogFilter> _logger;
-
-        public LogFilter(ILogger<LogFilter> logger)
-        {
-            _logger = logger;
-        }
-
         public void OnException(ExceptionContext context)
         {
             var exception = context.Exception;
 
-            var message = $@"Exception: {exception.Message}";
+            const string messageTemplate = "Exception occurred: {ExceptionMessage}";
+            logger.LogError(messageTemplate, exception.Message); // hoặc LogWarning, LogInformation, tuỳ Serilog config
 
-            _logger.LogError(message);
             context.Result = new ObjectResult(new
             {
-                Message = @"An error occured while processing your request.
-                            Please contact with admin for more information",
+                Message = "An error occurred while processing your request. Please contact the admin for more information.",
                 Detail = exception.Message
             })
             {

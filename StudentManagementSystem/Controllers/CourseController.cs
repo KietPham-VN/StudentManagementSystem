@@ -7,10 +7,13 @@ namespace StudentManagementSystem.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    [ServiceFilter(typeof(LogFilter))]
+    [TypeFilter(typeof(LogFilter), Arguments = [LogLevel.Warning])]
+    [AuditFilter]
     public class CourseController(ICourseService courseService) : ControllerBase
     {
         [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<CourseViewModel>), 200)]
+        [ProducesResponseType(500)]
         public IActionResult GetCourses(int? CourseId)
         {
             try
@@ -24,6 +27,9 @@ namespace StudentManagementSystem.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(CreateCourseModel), 200)]
+        [ProducesResponseType(500)]
+        [TypeFilter(typeof(CacheFilter), Arguments = [60])]
         public IActionResult CreateCourse(CreateCourseModel course)
         {
             try
@@ -37,6 +43,8 @@ namespace StudentManagementSystem.Controllers
         }
 
         [HttpPut]
+        [ProducesResponseType(typeof(CourseUpdateModel), 200)]
+        [ProducesResponseType(500)]
         public IActionResult UpdateCourse(CourseUpdateModel course)
         {
             try
@@ -50,6 +58,8 @@ namespace StudentManagementSystem.Controllers
         }
 
         [HttpDelete]
+        [ProducesResponseType(typeof(CourseViewModel), 200)]
+        [ProducesResponseType(500)]
         public IActionResult DeleteCourse(int courseId)
         {
             try
