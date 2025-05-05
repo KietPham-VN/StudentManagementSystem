@@ -1,0 +1,27 @@
+﻿using Microsoft.AspNetCore.Mvc.Filters;
+
+namespace StudentManagementSystem.Application.ActionFilters
+{
+    public class TestFilter : IActionFilter, IResultFilter
+    {
+        public void OnActionExecuted(ActionExecutedContext context)
+        {   //sau khi action execute và trả về kết quả
+            Console.WriteLine("OnActionExecuted");
+        }
+
+        public void OnActionExecuting(ActionExecutingContext context)
+        {   //chạy trước khi endpoint execute
+            Console.WriteLine("OnActionExecuting");
+        }
+
+        public void OnResultExecuted(ResultExecutedContext context)
+        {
+            Console.WriteLine("OnResultExecuted");
+        }
+
+        public void OnResultExecuting(ResultExecutingContext context)
+        {
+            Console.WriteLine("OnResultExecuting");
+        }
+    }
+}

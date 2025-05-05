@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using StudentManagementSystem.Application.ActionFilters;
 using StudentManagementSystem.Application.DTOs.CourseDTO;
 using StudentManagementSystem.Application.Services.Interface;
 
@@ -6,6 +7,7 @@ namespace StudentManagementSystem.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [ServiceFilter(typeof(LogFilter))]
     public class CourseController(ICourseService courseService) : ControllerBase
     {
         [HttpGet]

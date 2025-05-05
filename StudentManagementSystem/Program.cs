@@ -1,4 +1,5 @@
 using Serilog;
+using StudentManagementSystem.Application.ActionFilters;
 using StudentManagementSystem.Application.Middlewares;
 using StudentManagementSystem.Application.Services.Implementation;
 using StudentManagementSystem.Application.Services.Interface;
@@ -6,7 +7,10 @@ using StudentManagementSystem.Infrastructures;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(option =>
+{
+    option.Filters.Add<TestFilter>();
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -18,9 +22,11 @@ builder.Services.AddScoped<ICourseStudentService, CourseStudentService>();
 builder.Services.AddSingleton<LogMiddleware>();
 builder.Services.AddSingleton<RateLimitMiddleware>();
 
+builder.Services.AddSingleton<LogFilter>();
+
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Warning()
-    .WriteTo.File("D:\\LearningMaterial\\MyOwnCarrerPath\\C#\\StudentManagementSystem\\Log\\log.txt",
+    .WriteTo.File("\"D:\\DotNet\\StudentManagementSystem\\log.txt\"",
         rollingInterval: RollingInterval.Minute)
     .CreateLogger();
 builder.Host.UseSerilog();
