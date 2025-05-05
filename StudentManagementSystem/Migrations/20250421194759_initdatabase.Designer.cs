@@ -13,7 +13,7 @@ namespace StudentManagementSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20250421194759_initdatabase")]
-    partial class initdatabase
+    partial class InitDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

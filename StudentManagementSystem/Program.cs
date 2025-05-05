@@ -23,12 +23,12 @@ builder.Services.AddSingleton<LogMiddleware>();
 builder.Services.AddSingleton<RateLimitMiddleware>();
 builder.Services.AddSingleton<ICacheService, CacheService>();
 builder.Services.AddSingleton<LogFilter>();
+builder.Services.AddMemoryCache();
 
 var slnRoot = Directory.GetParent(AppContext.BaseDirectory)?
                         .Parent?.Parent?.Parent?.Parent?.FullName;
 
 var logDir = Path.Combine(slnRoot!, "Logs");
-
 
 if (!Directory.Exists(logDir))
 {
@@ -43,15 +43,12 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .CreateLogger();
 
-
-
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 
 app.UseHttpsRedirection();
 

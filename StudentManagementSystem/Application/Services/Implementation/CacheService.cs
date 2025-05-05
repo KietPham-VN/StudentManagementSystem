@@ -4,14 +4,15 @@ namespace StudentManagementSystem.Application.Services.Implementation
 {
     public class CacheService : ICacheService
     {
-        private Dictionary<string, CacheData> _cache = new();
-        public CacheData Get(string key)
+        private readonly Dictionary<string, CacheData> _cache = [];
+
+        public CacheData? Get(string key)
         {
-            if (!_cache.ContainsKey(key))
+            if (!_cache.TryGetValue(key, out CacheData? cacheData))
             {
                 return null;
             }
-            var cacheData = _cache[key];
+
             if (cacheData.Expiration < DateTime.Now)
             {
                 _cache.Remove(key);

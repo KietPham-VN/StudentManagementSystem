@@ -8,11 +8,17 @@ namespace StudentManagementSystem.Controllers
     [Route("api/[controller]")]
     public class StudentController(IStudentService studentService, ILogger<StudentController> logger) : ControllerBase
     {
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<StudentViewModel>>> GetStudents([FromQuery] int? id)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<StudentViewModel>>> GetStudents([FromQuery] int id)
         {
-            var result = await studentService.GetStudents(id);
-            throw new Exception("ahihi ngu =)))))))))");
+            var result = await studentService.GetStudent(id);
+            return Ok(result);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<StudentViewModel>>> GetAllStudents()
+        {
+            var result = await studentService.GetAllStudents();
             return Ok(result);
         }
 

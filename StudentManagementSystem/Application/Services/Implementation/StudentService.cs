@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using StudentManagementSystem.Application.DTOs.StudentDTO;
 using StudentManagementSystem.Application.Services.Interface;
 using StudentManagementSystem.Domain.Entities;
@@ -6,15 +7,54 @@ using StudentManagementSystem.Infrastructures;
 
 namespace StudentManagementSystem.Application.Services.Implementation
 {
-    public class StudentService(IApplicationDbContext context) : IStudentService
+    public class StudentService(IApplicationDbContext context, IMemoryCache cache) : IStudentService
     {
-        public async Task<IReadOnlyList<StudentViewModel>> GetStudents(int? id)
+        private const string STUDENT_KEY = "StudentKey";
+
+        public async Task<IEnumerable<StudentViewModel>> GetAllStudents()
+        {
+            var data = cache.Get<IEnumerable<StudentViewModel>>(STUDENT_KEY);
+            if (data == null)
+            {
+                data = await GetStudents();
+                var cacheOption = new MemoryCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(30)
+                };
+                cache.Set(STUDENT_KEY, data, cacheOption);
+            }
+            return data;
+        }
+
+        public async Task<IReadOnlyList<StudentViewModel>> GetStudents()
         {
             var query = context.Students.AsNoTracking().AsQueryable();
 
-            if (id.HasValue)
+            var students = await query.Select(s => new StudentViewModel
             {
-                query = query.Where(s => s.Id == id.Value);
+                Id = s.Id,
+                FirstName = s.FirstName,
+                LastName = s.LastName,
+                DateOfBirth = s.DateOfBirth,
+                Address = s.Address,
+                SchoolId = s.SchoolId
+            }).ToListAsync();
+
+            if (students is null || students.Count == 0)
+            {
+                throw new KeyNotFoundException("Student(s) not found.");
+            }
+
+            return students;
+        }
+
+        public async Task<IReadOnlyList<StudentViewModel>> GetStudent(int id)
+        {
+            var query = context.Students.AsNoTracking().AsQueryable();
+
+            if (id > 0)
+            {
+                query = query.Where(s => s.Id == id);
             }
 
             var students = await query.Select(s => new StudentViewModel
