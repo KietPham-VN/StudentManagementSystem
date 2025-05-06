@@ -12,8 +12,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Domain\Domain.csproj" />
-    <ProjectReference Include="..\Infrastructures\Infrastructures.csproj" />
+    <ProjectReference Include="..\Domain\Domain.csproj">
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Infrastructures\Infrastructures.csproj">
+      <Private>True</Private>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>
