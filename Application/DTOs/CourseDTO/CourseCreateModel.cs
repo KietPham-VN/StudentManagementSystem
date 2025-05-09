@@ -2,8 +2,8 @@
 {
     public class CreateCourseModel
     {
-        public int? CourseId { get; set; }
-        public string? CourseName { get; set; }
-        public DateTime StartDate { get; set; }
+        public int? CourseId { get; init; }
+        public string? CourseName { get; init; }
+        public DateTime StartDate { get; init; }
     }
 }

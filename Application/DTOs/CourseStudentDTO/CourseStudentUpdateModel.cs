@@ -2,10 +2,10 @@
 {
     public class CourseStudentUpdateModel
     {
-        public int CourseId { get; set; }
-        public int StudentId { get; set; }
-        public float AssignmentScore { get; set; }
-        public float PracticalScore { get; set; }
-        public float FinalScore { get; set; }
+        public int CourseId { get; init; }
+        public int StudentId { get; init; }
+        public float AssignmentScore { get; init; }
+        public float PracticalScore { get; init; }
+        public float FinalScore { get; init; }
     }
 }

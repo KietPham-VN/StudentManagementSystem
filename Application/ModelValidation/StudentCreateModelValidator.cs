@@ -1,12 +1,10 @@
-﻿namespace StudentManagementSystem.Application.ModelValidation
+﻿namespace Application.ModelValidation
 {
     public class StudentCreateModelValidator : AbstractValidator<StudentCreateModel>
     {
-        private readonly IApplicationDbContext _dbcontext;
 
-        public StudentCreateModelValidator(IApplicationDbContext dbcontext)
+        public StudentCreateModelValidator()
         {
-            _dbcontext = dbcontext;
             RuleFor(x => x.FirstName)
                 .NotEmpty().WithMessage("Tên không được để trống")
                 .Length(1, 255).WithMessage("Tên không được quá 255 ký tự");

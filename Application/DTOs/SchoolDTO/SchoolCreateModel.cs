@@ -5,8 +5,8 @@
         public int SchoolId { get; set; }
 
         [Required]
-        public string? SchoolName { get; set; }
+        public string? SchoolName { get; init; }
 
-        public string? Address { get; set; }
+        public string? Address { get; init; }
     }
 }
