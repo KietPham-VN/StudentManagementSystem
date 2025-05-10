@@ -10,6 +10,7 @@ namespace Infrastructures.Database
         public DbSet<School> Schools { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<CourseStudent> CourseStudents { get; set; }
+        public DbSet<User> Users { get; set; }
 
         public EntityEntry<T> Entity<T>(T entity) where T : class
         {
@@ -27,6 +28,7 @@ namespace Infrastructures.Database
             modelBuilder.ApplyConfiguration(new SchoolMapping());
             modelBuilder.ApplyConfiguration(new CourseMapping());
             modelBuilder.ApplyConfiguration(new StudentCourseMapping());
+            modelBuilder.ApplyConfiguration(new UserMapping());
             base.OnModelCreating(modelBuilder);
         }
 
