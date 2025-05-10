@@ -4,7 +4,7 @@ namespace Application.Services.Interface
 {
     public interface ICourseService
     {
-        IEnumerable<CourseViewModel> GetCourses(int? CourseId);
+        IEnumerable<CourseViewModel> GetCourses(int? courseId);
 
         CreateCourseModel CreateCourse(CreateCourseModel course);
 

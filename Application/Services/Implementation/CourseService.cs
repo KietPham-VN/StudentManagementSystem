@@ -5,20 +5,20 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Application.Services.Implementation
 {
-    public class CourseService(IApplicationDbContext _context) : ICourseService
+    public class CourseService(IApplicationDbContext context) : ICourseService
     {
-        public IEnumerable<CourseViewModel> GetCourses(int? CourseId)
+        public IEnumerable<CourseViewModel> GetCourses(int? courseId)
         {
-            var Course = _context.Courses.AsQueryable();
-            if (CourseId.HasValue)
+            var course = context.Courses.AsQueryable();
+            if (courseId.HasValue)
             {
-                Course = Course.Where(school => school.CourseId == CourseId);
+                course = course.Where(school => school.CourseId == courseId);
             }
-            if (Course.IsNullOrEmpty())
+            if (course.IsNullOrEmpty())
             {
                 throw new Exception("Course Not Found");
             }
-            return [.. Course.Select(course => new CourseViewModel
+            return [.. course.Select(course => new CourseViewModel
             {
                 CourseId = course.CourseId,
                 CourseName = course.CourseName,
@@ -33,8 +33,8 @@ namespace Application.Services.Implementation
                 CourseName = course.CourseName,
                 StartDate = course.StartDate,
             };
-            _context.Courses.Add(newCourse);
-            _context.SaveChanges();
+            context.Courses.Add(newCourse);
+            context.SaveChanges();
             return new CreateCourseModel
             {
                 CourseId = newCourse.CourseId,
@@ -45,7 +45,7 @@ namespace Application.Services.Implementation
 
         public CourseUpdateModel UpdateCourse(CourseUpdateModel updateCourse)
         {
-            var course = _context.Courses.FirstOrDefault(x => x.CourseId == updateCourse.CourseId);
+            var course = context.Courses.FirstOrDefault(x => x.CourseId == updateCourse.CourseId);
             if (course == null)
             {
                 throw new Exception("Course Not Found");
@@ -53,7 +53,7 @@ namespace Application.Services.Implementation
 
             course.CourseName = updateCourse.CourseName;
             course.StartDate = updateCourse.StartDate;
-            _context.SaveChanges();
+            context.SaveChanges();
 
             return new CourseUpdateModel
             {
@@ -65,11 +65,11 @@ namespace Application.Services.Implementation
 
         public CourseViewModel DeleteCourse(int courseId)
         {
-            var course = _context.Courses.FirstOrDefault(x => x.CourseId == courseId);
+            var course = context.Courses.FirstOrDefault(x => x.CourseId == courseId);
             if (course != null)
             {
-                _context.Courses.Remove(course);
-                _context.SaveChanges();
+                context.Courses.Remove(course);
+                context.SaveChanges();
                 return new CourseViewModel
                 {
                     CourseId = course.CourseId,

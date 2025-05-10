@@ -8,17 +8,14 @@ namespace Application.Services.Implementation
 
         public CacheData? Get(string key)
         {
-            if (!_cache.TryGetValue(key, out CacheData? cacheData))
+            if (!_cache.TryGetValue(key, out var cacheData))
             {
                 return null;
             }
 
-            if (cacheData.Expiration < DateTime.Now)
-            {
-                _cache.Remove(key);
-                return null;
-            }
-            return cacheData;
+            if (cacheData.Expiration >= DateTime.Now) return cacheData;
+            _cache.Remove(key);
+            return null;
         }
 
         public void Remove(string key)

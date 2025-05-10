@@ -22,9 +22,21 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Application\Application.csproj" />
-    <ProjectReference Include="..\Domain\Domain.csproj" />
-    <ProjectReference Include="..\Infrastructures\Infrastructures.csproj" />
+    <ProjectReference Include="..\Application\Application.csproj">
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Domain\Domain.csproj">
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Infrastructures\Infrastructures.csproj">
+      <Private>True</Private>
+    </ProjectReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

@@ -2,7 +2,7 @@
 
 namespace Web.ActionFilters
 {
-    public class AuditFilter() : ActionFilterAttribute
+    public class AuditFilter : ActionFilterAttribute
     {
         public override void OnActionExecuting(ActionExecutingContext context)
         {
@@ -11,11 +11,11 @@ namespace Web.ActionFilters
             var path = request.Path;
             var argument = context.ActionArguments;
         }
+
         public override void OnActionExecuted(ActionExecutedContext context)
         {
             var result = context.Result;
             var statusCode = context.HttpContext.Response.StatusCode;
         }
     }
-
 }

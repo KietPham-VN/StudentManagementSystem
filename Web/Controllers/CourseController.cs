@@ -12,11 +12,11 @@ namespace Web.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<CourseViewModel>), 200)]
         [ProducesResponseType(500)]
-        public IActionResult GetCourses(int? CourseId)
+        public IActionResult GetCourses(int? courseId)
         {
             try
             {
-                return Ok(courseService.GetCourses(CourseId));
+                return Ok(courseService.GetCourses(courseId));
             }
             catch (Exception ex)
             {
