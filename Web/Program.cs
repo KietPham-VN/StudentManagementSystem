@@ -1,4 +1,6 @@
-﻿using Application.Services.Implementation;
+﻿// scan assembly Application.dll nơi chứa StudentCreateModelValidator
+using Application.ModelValidators;  // nhớ thêm reference đến project Application
+using Application.Services.Implementation;
 using Domain.Abstractions;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -29,6 +31,8 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddMemoryCache();
+
+builder.Services.AddValidatorsFromAssemblyContaining<StudentCreateModelValidator>();
 
 var slnRoot = Directory.GetParent(AppContext.BaseDirectory)?
                         .Parent?.Parent?.Parent?.Parent?.FullName;

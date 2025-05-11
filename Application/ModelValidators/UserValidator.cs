@@ -1,6 +1,6 @@
 ﻿using Application.DTOs.UserDTO;
 
-namespace Application.ModelValidation
+namespace Application.ModelValiors
 {
     public class UserValidator : AbstractValidator<UserRegisterModel>
     {
