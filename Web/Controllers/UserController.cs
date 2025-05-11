@@ -1,38 +1,39 @@
 ﻿using Application.DTOs.UserDTO;
-using TodoWeb.Application.Services.User;
 
-namespace TodoWeb.Controllers
+namespace Web.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class UserController : ControllerBase
+    [Route("user")]
+    public class UserController(IUserService userService) : ControllerBase
     {
-        private readonly IUserService _userService;
-
-        public UserController(IUserService userService)
-        {
-            _userService = userService;
-        }
-
-        [HttpPost]
-        public IActionResult Register(RegisterUserModel users)
+        [HttpPost("register")]
+        [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+        public IActionResult Register(UserRegisterModel users)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            return Ok(_userService.Register(users));
+            return Ok(userService.Register(users));
         }
 
-        [HttpPost("/login")]
-        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)] // Add response type annotation
+        [HttpPost("login")]
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         public IActionResult Login(UserLoginModel users)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            return Ok(_userService.Login(users));
+            return Ok(userService.Login(users));
+        }
+
+        [HttpPost("logout")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        public IActionResult Logout()
+        {
+            // Implement logout logic here
+            return Ok("Logged out successfully");
         }
     }
 }

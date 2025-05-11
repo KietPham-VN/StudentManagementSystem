@@ -1,47 +1,40 @@
 ﻿using Application.DTOs.UserDTO;
 using Application.Helpers;
+using Application.Services.Interface;
+using Domain.Entities;
 
-namespace TodoWeb.Application.Services.User
+namespace Application.Services.Implementation;
+
+public class UserService(IApplicationDbContext context) : IUserService
 {
-    //brute force
-    public class UserService : IUserService
+    public bool Login(UserLoginModel model)
     {
-        private readonly IApplicationDbContext _context;
+        var user = context.Users
+            .FirstOrDefault(x => x.EmailAddress == model.EmailAddress);
 
-        public UserService(IApplicationDbContext context)
+        return user != null &&
+            HashHelper.BCryptVerify(model.Password, user.Password, user.Salt);
+    }
+
+    public int Register(UserRegisterModel model)
+    {
+        bool existed = context.Users.Any(u =>
+            u.UserName == model.Username || u.EmailAddress == model.Email);
+        if (existed) return -1;
+
+        var salt = HashHelper.GenerateSalt();
+        var hashPassword = HashHelper.BCryptHash(model.Password, salt);
+
+        var data = new User
         {
-            _context = context;
-        }
+            UserName = model.Username,
+            EmailAddress = model.Email,
+            Password = hashPassword,
+            Salt = salt
+        };
 
-        //Salting: đã mặn thêm muối
-        public bool Login(UserLoginModel loginModel)
-        {
-            var user = _context.Users
-                .FirstOrDefault(x => x.EmailAddress == loginModel.EmailAddress);
-            return user != null &&
-                HashHelper.BCriptVerify(loginModel.Password, user.Password);
-        }
-
-        public int Register(RegisterUserModel user)
-        {
-            //kiểm tra xem user id có bị trùng hay không
-            var id = _context.Users.Find(user.Id);
-            if (id != null || user.Id <= 1)
-            {
-                return -1;
-            }
-            var hashPassword = HashHelper.BCriptHash(user.Password);
-
-            var data = new Domain.Entities.User
-            {
-                UserName = user.Username,
-                EmailAddress = user.Email,
-                Password = hashPassword,
-            };
-
-            _context.Users.Add(data);
-            _context.SaveChanges();
-            return data.Id;
-        }
+        context.Users.Add(data);
+        context.SaveChanges();
+        return data.Id;
     }
 }

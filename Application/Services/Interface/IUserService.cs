@@ -1,11 +1,11 @@
 ﻿using Application.DTOs.UserDTO;
 
-namespace TodoWeb.Application.Services.User
+namespace Application.Services.Interface
 {
     public interface IUserService
     {
-        public int Register(RegisterUserModel user);
+        public int Register(UserRegisterModel model);
 
-        public bool Login(UserLoginModel user);
+        public bool Login(UserLoginModel model);
     }
 }

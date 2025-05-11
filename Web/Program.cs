@@ -25,6 +25,7 @@ builder.Services.AddSingleton<LogMiddleware>();
 builder.Services.AddSingleton<RateLimitMiddleware>();
 builder.Services.AddSingleton<ICacheService, CacheService>();
 builder.Services.AddSingleton<LogFilter>();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddMemoryCache();
