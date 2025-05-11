@@ -365,3 +365,4 @@ FodyWeavers.xsd
 echo ".vs/" >> .gitignore
 echo "bin/" >> .gitignore
 echo "obj/" >> .gitignore
+/Web/appsettings.json
