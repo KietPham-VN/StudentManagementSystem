@@ -1,4 +1,4 @@
-﻿namespace Application.ModelValidation
+﻿namespace Application.ModelValiors
 {
     public class AddressValidator : AbstractValidator<Address>
     {

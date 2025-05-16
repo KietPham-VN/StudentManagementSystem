@@ -1,4 +1,6 @@
-﻿using Application.Services.Implementation;
+﻿// scan assembly Application.dll nơi chứa StudentCreateModelValidator
+using Application.ModelValidators;  // nhớ thêm reference đến project Application
+using Application.Services.Implementation;
 using Domain.Abstractions;
 using FluentValidation;
 using FluentValidation.AspNetCore;
