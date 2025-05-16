@@ -9,10 +9,7 @@ using Web.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers(option =>
-{
-    option.Filters.Add<TestFilter>();
-});
+builder.Services.AddControllers(option => option.Filters.Add<TestFilter>());
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -29,7 +26,13 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddMemoryCache();
-
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 var slnRoot = Directory.GetParent(AppContext.BaseDirectory)?
                         .Parent?.Parent?.Parent?.Parent?.FullName;
 
@@ -58,7 +61,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-
+app.UseSession();
 app.UseMiddleware<LogMiddleware>();
 app.UseMiddleware<RateLimitMiddleware>();
 app.MapControllers();

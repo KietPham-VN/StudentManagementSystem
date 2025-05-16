@@ -38,9 +38,11 @@ namespace Infrastructures.Database
             return base.SaveChanges();
         }
 
-        public async Task<int> SaveChangesAsync()
+        public Task<int> SaveChangesAsync()
         {
-            return await base.SaveChangesAsync();
+            Console.WriteLine("SaveChanges");
+
+            return base.SaveChangesAsync();
         }
     }
 }

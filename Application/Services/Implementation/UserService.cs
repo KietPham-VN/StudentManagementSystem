@@ -7,13 +7,14 @@ namespace Application.Services.Implementation;
 
 public class UserService(IApplicationDbContext context) : IUserService
 {
-    public bool Login(UserLoginModel model)
+    public User? Login(UserLoginModel model)
     {
         var user = context.Users
             .FirstOrDefault(x => x.EmailAddress == model.EmailAddress);
-
-        return user != null &&
-            HashHelper.BCryptVerify(model.Password, user.Password, user.Salt);
+        if (user == null) return null;
+        var hashPassword = HashHelper.BCryptHash(model.Password, user.Salt);
+        if (user.Password != hashPassword) return null;
+        return user;
     }
 
     public int Register(UserRegisterModel model)

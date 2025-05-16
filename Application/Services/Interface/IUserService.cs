@@ -1,4 +1,5 @@
 ﻿using Application.DTOs.UserDTO;
+using Domain.Entities;
 
 namespace Application.Services.Interface
 {
@@ -6,6 +7,6 @@ namespace Application.Services.Interface
     {
         public int Register(UserRegisterModel model);
 
-        public bool Login(UserLoginModel model);
+        public User? Login(UserLoginModel model);
     }
 }
