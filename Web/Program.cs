@@ -1,10 +1,11 @@
-﻿// scan assembly Application.dll nơi chứa StudentCreateModelValidator
-using Application.ModelValidators;  // nhớ thêm reference đến project Application
-using Application.Services.Implementation;
+﻿using Application.Services.Implementation;
 using Domain.Abstractions;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Infrastructures.Database;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Serilog;
 using Web.ActionFilters;
 using Web.Middlewares;
@@ -13,18 +14,38 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers(option => option.Filters.Add<TestFilter>());
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen
+(option =>
+{
+    option.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Title = "Student Management API",
+        Version = "v1",
+        Description = "blablabla"
+    });
+    var securityScheme = new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Pls enter JWP Code",
+        Reference = new OpenApiReference
+        {
+            Type = ReferenceType.SecurityScheme,
+            Id = "Bearer"
+        }
+    };
+    option.AddSecurityDefinition("Bearer", securityScheme);
+    option.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+    {securityScheme, Array.Empty<string>() }
+    });
+});
 
 builder.Services.AddDbContext<IApplicationDbContext, ApplicationDbContext>();
-builder.Services.AddScoped<IStudentService, StudentService>();
-builder.Services.AddScoped<ISchoolService, SchoolService>();
-builder.Services.AddScoped<ICourseService, CourseService>();
-builder.Services.AddScoped<ICourseStudentService, CourseStudentService>();
-builder.Services.AddSingleton<LogMiddleware>();
-builder.Services.AddSingleton<RateLimitMiddleware>();
-builder.Services.AddSingleton<ICacheService, CacheService>();
-builder.Services.AddSingleton<LogFilter>();
-builder.Services.AddScoped<IUserService, UserService>();
+
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddMemoryCache();
@@ -35,6 +56,54 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+
+var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+builder.Services.Configure<JwtSettings>(jwtSettings);
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    }).AddJwtBearer
+    (
+        options =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = jwtSettings["Issuer"],
+                ValidAudience = jwtSettings["Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("SecretKey"))
+            };
+        }
+    )
+    ;
+
+//.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+//    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+//    {
+//        options.Cookie.HttpOnly = true;
+//        options.ExpireTimeSpan = TimeSpan.FromSeconds(30);
+//        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+//        options.SlidingExpiration = true;
+//        options.Events = new CookieAuthenticationEvents
+//        {
+//            OnRedirectToLogin = context =>
+//            {
+//                context.Response.StatusCode = 401;
+//                return Task.CompletedTask;
+//            },
+//            OnRedirectToAccessDenied = context =>
+//            {
+//                context.Response.StatusCode = 403;
+//                return Task.CompletedTask;
+//            }
+//        };
+//    });
+
 var slnRoot = Directory.GetParent(AppContext.BaseDirectory)?
                         .Parent?.Parent?.Parent?.Parent?.FullName;
 
@@ -61,7 +130,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
 app.UseMiddleware<LogMiddleware>();

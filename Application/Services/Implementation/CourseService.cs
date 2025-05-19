@@ -1,7 +1,6 @@
 ﻿using Application.DTOs.CourseDTO;
 using Application.Services.Interface;
 using Domain.Entities;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Application.Services.Implementation
 {
@@ -14,10 +13,7 @@ namespace Application.Services.Implementation
             {
                 course = course.Where(school => school.CourseId == courseId);
             }
-            if (course.IsNullOrEmpty())
-            {
-                throw new Exception("Course Not Found");
-            }
+
             return [.. course.Select(course => new CourseViewModel
             {
                 CourseId = course.CourseId,

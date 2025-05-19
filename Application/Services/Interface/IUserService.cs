@@ -8,5 +8,7 @@ namespace Application.Services.Interface
         public int Register(UserRegisterModel model);
 
         public User? Login(UserLoginModel model);
+
+        string GenerateJwt(User model);
     }
 }
