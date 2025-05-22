@@ -8,8 +8,8 @@
                 .NotEmpty().WithMessage("Street is required.")
                 .Length(1, 255).WithMessage("Street must be between 1 and 255 characters.");
             RuleFor(x => x.ZipCode)
-                .NotEmpty().WithMessage("ZipCode is required.")
-                .Matches(@"^\d{5}(-\d{4})?$").WithMessage("ZipCode must be a valid format.");
+                .NotEmpty()
+                .WithMessage("ZipCode is required.");
         }
     }
 }

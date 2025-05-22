@@ -10,7 +10,7 @@
 
         public DateTime DateOfBirth { get; set; }
 
-        public string? Address { get; set; }
+        public String? Address { get; set; }
 
         public int SchoolId { get; set; }
     }

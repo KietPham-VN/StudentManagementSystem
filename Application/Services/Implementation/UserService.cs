@@ -38,7 +38,6 @@ public class UserService(IApplicationDbContext context, IOptions<JwtSettings> jw
 
     public User? Login(UserLoginModel model)
     {
-
         var user = context.Users
             .FirstOrDefault(x => x.EmailAddress == model.EmailAddress);
 
@@ -53,10 +52,9 @@ public class UserService(IApplicationDbContext context, IOptions<JwtSettings> jw
 
     public int Register(UserRegisterModel model)
     {
-        bool existed = context.Users.Any
-        (u =>
-            string.Equals(u.UserName, model.Username, StringComparison.OrdinalIgnoreCase) ||
-            string.Equals(u.EmailAddress, model.Email, StringComparison.OrdinalIgnoreCase)
+        bool existed = context.Users.Any(u =>
+            u.UserName.ToLower() == model.Username.ToLower() ||
+            u.EmailAddress.ToLower() == model.Email.ToLower()
         );
 
         if (existed) return -1;
@@ -68,7 +66,6 @@ public class UserService(IApplicationDbContext context, IOptions<JwtSettings> jw
             UserName = model.Username,
             EmailAddress = model.Email,
             Password = hashPassword,
-            // Không cần lưu salt riêng nữa
         };
 
         context.Users.Add(data);

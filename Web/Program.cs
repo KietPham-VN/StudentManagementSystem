@@ -7,13 +7,14 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using Web;
 using Web.ActionFilters;
 using Web.Middlewares;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers(option => option.Filters.Add<TestFilter>());
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddService();
 builder.Services.AddSwaggerGen
 (option =>
 {
